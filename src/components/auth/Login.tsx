@@ -1,21 +1,26 @@
 import React, { useState } from "react";
 import useAuthStore from "../../store/authStore";
 import { UserInfo } from "../../types/type";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { signIn } from "../../api/auth";
 import { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const setChkAuth = useAuthStore((state) => state.setChkAuth);
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const onToggle = () => {
     setChkAuth(false);
   };
   const mutation = useMutation({
     mutationFn: signIn,
-    onSuccess: () => {
+    onSuccess: (data) => {
       setChkAuth(true);
+      queryClient.setQueryData(["accessToken"], data.accessToken);
+      navigate("/");
     },
     onError: (error: AxiosError) => {
       const data = error.response?.data as { message: string };
