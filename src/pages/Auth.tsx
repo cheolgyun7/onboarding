@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import Register from "../components/auth/Register";
 import useAuthStore from "../store/authStore";
 import Login from "../components/auth/Login";
