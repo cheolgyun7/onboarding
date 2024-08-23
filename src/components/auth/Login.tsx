@@ -10,6 +10,7 @@ const Login = () => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const setChkAuth = useAuthStore((state) => state.setChkAuth);
+  const setUserInfo = useAuthStore((state) => state.setUserInfo);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const onToggle = () => {
@@ -18,7 +19,9 @@ const Login = () => {
   const mutation = useMutation({
     mutationFn: signIn,
     onSuccess: (data) => {
+      console.log("data", data);
       setChkAuth(true);
+      setUserInfo(data.nickname);
       queryClient.setQueryData(["accessToken"], data.accessToken);
       navigate("/");
     },
